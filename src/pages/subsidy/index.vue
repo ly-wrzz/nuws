@@ -8,23 +8,29 @@
 				<div id="my_chart"></div>
 				<div class="bt">
 					<div class="title">最高补贴</div>
-					<div class="fee">6.6</div>
+					<div class="fee">{{amount}}</div>
 					<div class="unit">万</div>
 				</div>
 			</div>
 			<div class="info">
 				<ul>
-					<li class="li1"><span>人社局 0%</span></li>
-					<li class="li2"><span>科委 0%</span></li>
-					<li class="li3"><span>经信委 0%</span></li>
-					<li class="li4"><span>中小企业局 0%</span></li>
-					<li class="li5"><span>其他 0%</span></li>
+					<li class="li1"><span>人社局 {{renshe}}%</span></li>
+					<li class="li2"><span>科委 {{kewei}}%</span></li>
+					<li class="li3"><span>经信委 {{jingxinwei}}%</span></li>
+					<li class="li4"><span>中小企业局 {{zhongxiao}}%</span></li>
+					<li class="li5"><span>其他 {{qita}}%</span></li>
 				</ul>
 				<button class="info_btn" :class="{'active': isJump}" @click="Jump">查看详情</button>
 			</div>
 		</div>
 		<div class="content" :class="{'is_fixed' : isFixed}">
 			<ul class="select">
+				<li>
+					<div class="label">公司名称</div>
+					<div class="value">
+						<input type="text" class="value_text" v-model="form.company_name">
+					</div>
+				</li>
 				<li>
 					<div class="label">所属区域</div>
 					<div class="value" @click="show1=true">
@@ -42,6 +48,7 @@
 				<li>
 					<div class="label">上年营收</div>
 					<div class="value" @click="show3=true">
+						<div class="value_text">{{text3}}</div>
 						<i class="fa fa-angle-down"></i>
 					</div>
 				</li>
@@ -77,10 +84,13 @@
 					<div class="topic">{{i+1}}.{{item.subject}}</div>
 					<div class="option_list">
 						<div class="option_item" v-for="(val, j) in item.answer" :key="j">
-							<input :id="'D'+(i+1)+'_'+(j+1)" type="radio" :value="j+1" :name="item.name" @change="radioChange($event, item.name)">
-							<label :for="'D'+(i+1)+'_'+(j+1)">是</label>
+							<input :id="'D'+(i+1)+'_'+(j+1)" type="radio" :value="j+1" :name="item.name" @change="radioChange($event, item.name)" :checked="j ? true : false">
+							<label :for="'D'+(i+1)+'_'+(j+1)">{{j?"否":"是"}}</label>
 						</div>
 					</div>
+				</li>
+				<li class="bottom">
+					<button class="btn" @click="submit">提交</button>
 				</li>
 			</ul>
 		</div>
@@ -100,19 +110,19 @@
 
 
 		<popup v-model="show4">
-			<popup-header left-text="取消" right-text="确认"  title="输入社保人数" @on-click-left="show4=false" @on-click-right="show4=false"></popup-header>
+			<popup-header left-text="取消" right-text="确认"  title="输入社保人数" @on-click-left="show4=false" @on-click-right="confirm(4)"></popup-header>
 			<div style="height:238px;">
 				<x-number v-model="value4" :min="0" :max="200" :fillable="true" width="100%" button-style="round"></x-number>
 			</div>
 		</popup>
 		<popup v-model="show5">
-			<popup-header left-text="取消" right-text="确认"  title="输入农民工数" @on-click-left="show5=false" @on-click-right="show5=false"></popup-header>
+			<popup-header left-text="取消" right-text="确认"  title="输入农民工数" @on-click-left="show5=false" @on-click-right="confirm(5)"></popup-header>
 			<div style="height:238px;">
 				<x-number v-model="value5" :min="0" :max="200" :fillable="true" width="100%" button-style="round"></x-number>
 			</div>
 		</popup>
 		<popup v-model="show6">
-			<popup-header left-text="取消" right-text="确认"  title="输入农民工数" @on-click-left="show6=false" @on-click-right="show6=false"></popup-header>
+			<popup-header left-text="取消" right-text="确认"  title="输入农民工数" @on-click-left="show6=false" @on-click-right="confirm(6)"></popup-header>
 			<div style="height:238px;">
 				<x-number v-model="value6" :min="0" :max="200" :fillable="true" width="100%" button-style="round"></x-number>
 			</div>
@@ -131,12 +141,12 @@ export default {
 			isFixed: false,
 
 			show1: false,    // 选择区域
-			listt1: [["万州区", "黔江区", "涪陵区", "渝中区", "大渡口区", "江北区", "沙坪坝区", "九龙坡区", "南岸区", "北碚区", "渝北区", "巴南区", "长寿区", "江津区", "合川区", "永川区", "南川区", "綦江区", "大足区", "璧山区", "铜梁区", "潼南区", "荣昌区", "开州区", "梁平区", "武隆区", "城口县", "丰都县", "垫江县", "忠县", "云阳县", "奉节县", "巫山县", "巫溪县", "石柱土家族自治县", "秀山土家族苗族自治县", "酉阳土家族苗族自治县", "彭水苗族土家族自治县"]],
+			listt1: [],
 			value1: [],
 			text1: '',
 
 			show2: false,    // 选择行业
-			listt2: [["农、林、牧、渔业", "采矿业", "制造业", "电力、热力、燃气及水的生产和供应业", "环境和公共设施管理业", "建筑业", "交通运输、仓储业和邮政业", "信息传输、计算机服务和软件业", "批发和零售业", "住宿、餐饮业", "金融、保险业", "房地产业", "租赁和商务服务业", "科学研究、技术服务和地质勘查业", "水利、环境和公共设施管理业", "居民服务和其他服务业", "教育", "卫生、社会保障和社会服务业", "文化、体育、娱乐业", "综合（含投资类、主业不明显）", "其它"]],
+			listt2: [],
 			value2: [],
 			text2: '',
 
@@ -200,15 +210,64 @@ export default {
 			isMore: false,    // 是否查看更多
 			isJump: true,    // 是否能查看详情
 
-			form: {}
+			form: {
+				social_security: '2', 
+				sale_income: '2',
+				shares: '2',
+				develop: '2',
+				knowledge: '2',
+				loan: '2',
+				invoice: '2',
+				enterprise_cases: '2',
+				company_name: '',
+				industry_id: '2',
+				business_income: '0',
+				social_security_num: '0',
+				staff_num: '0',
+				college_student_num: '0'
+
+			},
+			cityList: [],
+			industryList: [],
+			revenueList: [],
+			amount: 0,
+			renshe: 0,
+			kewei: 0,
+			jingxinwei: 0,
+			zhongxiao: 0,
+			qita: 0
 		}
 	},
 	mounted () {
 		window.addEventListener('scroll',this.handleScroll, true); // 监听滚动事件，然后用handleScroll这个方法进行相应的处理
+		this.$util.get('mobile/income-list').then(res=>{
+			let arr = [], data = res.data, revenueList = [];
+			for(var i in data.list){
+				arr.push(data.list[i]);
+				revenueList.push({
+					id: i,
+					val: data.list[i]
+				})
+			}
+			this.listt3 = [arr];
+			this.revenueList = revenueList;
+			console.log(this.revenueList)
+
+			// 选区
+			this.cityList = data.city_list;
+			let city_list = data.city_list.map( item => { return {name: item.name,value: item.name} } );
+			this.listt1 = [city_list];
+
+			// 选行业
+			this.industryList = data.industry_list;
+			let industry_list = data.industry_list.map( item => { return {name: item.name,value: item.name} } );
+			this.listt2 = [industry_list];
+		})
 		this.Chart();
 	},
 	methods: {
 		Chart(){
+			var {renshe, kewei, jingxinwei, zhongxiao, qita} = this;
 			let myChart = this.$echarts.init(document.getElementById('my_chart'))
 			// 绘制图表
 			myChart.setOption({
@@ -217,7 +276,7 @@ export default {
 					name: '销量',
 					type: 'pie',
 					radius: ['58%', '90%'],
-					data: [0, 0, 0, 0, 0],
+					data: [renshe, kewei, jingxinwei, zhongxiao, qita],
 					label: { 　　　　　　　　　　//去除饼图的指示折线label
 						normal: {
 							show: false,
@@ -235,7 +294,42 @@ export default {
 		},
 		confirm(index){
 			this["show"+index] = false;
-			this["text"+index] = this["value"+index][0];
+			if (index < 4) {
+				this["text"+index] = this["value"+index][0];
+			}
+
+			if (index == 2) {
+				let id = this.industryList.filter( item => item.name == this.text2 )[0].id;
+				this.form.industry_id = id;
+			}
+			if (index >= 4) {
+				this.form.social_security_num = this.text4;
+				this.form.college_student_num = this.text6;
+				this.form.staff_num = this.text5;
+			}
+
+			var revenue = 0;
+			if (this.text3) {
+				revenue = this.revenueList.filter(item => this.text3 == item.val )[0].id;
+				this.form.business_income = revenue;
+			}
+			var data = {
+				college_student: this.value6 || 0,
+				social_security: this.value4 || 0,
+				staff: this.value5 || 0,
+				revenue: revenue || 0
+			}
+			if (data.college_student || data.social_security || data.staff || data.revenue) {
+				this.$util.get('mobile/calculate-amount',data).then(res=>{
+					this.amount = res.data.amount;
+					this.renshe = res.data.list.renshe;
+					this.kewei = res.data.list.kewei;
+					this.jingxinwei = res.data.list.jingxinwei;
+					this.zhongxiao = res.data.list.zhongxiao;
+					this.qita = res.data.list.qita;
+					this.Chart();
+				})
+			}
 		},
 		Jump(){
 			if (this.isJump) {
@@ -245,7 +339,11 @@ export default {
 		radioChange(e, type){
 			var val = e.target.value;
 			this.form[type] = val;
-			console.log(this.form)
+		},
+		submit(){
+			this.$util.get('mobile/receive-subsidy', this.form).then(res=>{
+				this.$vux.toast.text('提交成功');
+			})
 		}
 	}
 }
@@ -255,26 +353,6 @@ export default {
 html,body,#app{
   width: 100%;
   height: auto;
-}
-input[type=radio]+label:before {
-	content: "";
-	display: inline-block;
-	vertical-align: middle;
-	font-size: 14px;
-	position: relative;
-	top: -2px;
-	width: 1em;
-	height: 1em;
-	margin-right: .4em;
-	border-radius: 50%;
-	border: 1px solid #666;
-	text-indent: .15em;
-	padding: .1em;
-}
-input[type=radio]:checked+label:before {
-	background-color: #147edd;
-	border: 1px solid #147edd;
-	background-clip: content-box;
 }
 section.subsidy{
 	overflow: hidden;
@@ -391,6 +469,11 @@ section.subsidy{
 							background-color: #9a76be;
 						}
 					}
+					&.li6{
+						&:before{
+							background-color: green;
+						}
+					}
 				}
 			}
 			.info_btn{
@@ -446,7 +529,16 @@ section.subsidy{
 					.value_text{
 						overflow: hidden;
 						text-overflow:ellipsis;
-						white-space: nowrap;
+						white-space: nowrap;	
+					}
+					input.value_text{
+						overflow: auto;
+						border: none;
+						outline: none;
+						background-color: #f5f5f5;
+						color: #333;
+						height: 100%;
+						display: block;
 					}
 					i{
 						display: block;
@@ -497,6 +589,23 @@ section.subsidy{
 							width: 100%;
 							height: 100%;
 						}
+					}
+				}
+				&.bottom{
+					padding-bottom: 10px;
+					.btn{
+						display: block;
+						width: 100px;
+						height: 30px;
+						color: #fff;
+						margin-top: 6px;
+						text-align: center;
+						background-color: #ccc;
+						border-radius: 5px;
+						font-size: 16px;
+						line-height: 30px;
+						border: none;
+						background-color: #147edd;
 					}
 				}
 			}

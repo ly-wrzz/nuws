@@ -4,7 +4,7 @@
     <h1>{{ msg }}</h1> -->
       <router-link class="hello_a" to="/subsidy/index">领补贴</router-link>
       <router-link class="hello_a" to="/policy/index">查政策</router-link>
-      <router-link class="hello_a" to="/index/index">我的企业</router-link>
+      <router-link class="hello_a" to="/my/my">我的企业</router-link>
   </div>
 </template>
 

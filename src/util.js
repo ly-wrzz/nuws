@@ -32,6 +32,7 @@ function getTokene (callback) {
 	if (code) {
 		get('login/get-token', {code}).then(res=>{
 			localStorage.setItem("newsToken",res.data.token);
+			localStorage.setItem("newsIsBind",res.data.is_bind);
 			callback && callback();
 		})
 	}else{
@@ -76,6 +77,7 @@ function ajaxRequest (url,params={},type){
 			if (response.data.code == 0) {
 				resolve(response.data);
 			}else if (response.data.code == -1) {
+				var pageUrl = window.location.href;
 				var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6ad5b33a57eec020&redirect_uri='+ encodeURIComponent(pageUrl) + 
 				'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 				window.location.href = url;

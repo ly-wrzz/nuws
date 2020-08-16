@@ -16,7 +16,7 @@
 					<div>来源：{{detail.department_name}}</div>
 				</div>
 				<div class="coll" @click="collection">
-					<i class="fa fa-fw" :class="detail.is_collect ? 'fa-heart':'fa-heart-o'"></i>收藏
+					<i class="fa fa-fw" :class=" detail.is_collect ? 'fa-heart':'fa-heart-o'" ></i>收藏
 				</div>
 			</div>
 			<div class="doc-digest">{{detail.brief}}</div>
@@ -46,22 +46,23 @@ export default {
 			this.$util.get('mobile/policy-detail',{
 				id: this.id
 			}).then(res=>{
-				this.detail = res.data
+				this.detail = res.data;
+				console.log(res.data)
 			})
 		},
 		// 点击收藏
 		collection () {
 			var status = this.detail.is_collect == 0 ? 1 : 2;
 			var id = this.detail.id;
-			this.$util.post('mobile/collect',{
+			this.$util.get('mobile/collect',{
 				status,
 				id
 			}).then(res=>{
-				if (data.status==1) {
-					Vue.$vux.toast.text("收藏成功");
+				if (status==1) {
+					this.$vux.toast.text("收藏成功");
 					this.detail.is_collect = 1;
 				}else {
-					Vue.$vux.toast.text("取消收藏");
+					this.$vux.toast.text("取消收藏");
 					this.detail.is_collect = 0;
 				}
 			})
@@ -123,6 +124,9 @@ section.detail{
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			.fa-heart{
+				color: #ee5136;
+			}
 		}
 		.doc-digest{
 			font-size: 14px;

@@ -33,8 +33,8 @@ export default new Router({
     },
     {
       path: '/subsidy/projectList',
-      name: 'ProjectList',
-      component: () => import("@/pages/subsidy/projectList")
+      name: 'ProjectLists',
+      component: () => import("@/pages/subsidy/projectLists")
     },
     {
       path: '/subsidy/projectId',
@@ -50,6 +50,37 @@ export default new Router({
       path: '/subsidy/document',
       name: 'Document',
       component: () => import("@/pages/subsidy/document")
+    },
+    {
+      path: '/my/my',
+      name: 'My',
+      component: () => import("@/pages/my/my")
+    },
+    {
+      path: '/my/feedback',
+      name: 'Feedback',
+      component: () => import("@/pages/my/feedback")
+    },
+    {
+      path: '/my/progressList',
+      name: 'ProgressList',
+      component: () => import("@/pages/my/progressList")
+    },
+    {
+      path: '/my/register',
+      name: 'Register',
+      component: () => import("@/pages/my/register")
+    },
+    {
+      path: '/my/collectionList',
+      name: 'CollectionList',
+      component: () => import("@/pages/my/collectionList")
+    },
+    {
+      path: '/my/enterpriseInfo',
+      name: 'EnterpriseInfo',
+      component: () => import("@/pages/my/enterpriseInfo")
     }
+    
   ]
 })

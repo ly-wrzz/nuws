@@ -33,7 +33,7 @@
 		<article>
 			<scroller class="scroller" :lock-x="true" v-if="policy_list.length">
 				<ul>
-					<li v-for="(item, index) in policy_list" :key="item.id" @click="detail">
+					<li v-for="(item, index) in policy_list" :key="item.id" @click="detail(item.id)">
 						<div class="title">{{item.titile}}</div>
 						<div class="content">{{item.brief}}</div>
 						<div class="footer">
@@ -166,6 +166,9 @@
 					let id = this.industry_list.filter(item=>item.name==this.value1[0])[0].id;
 					this.industry_id = id;
 					this.getData();
+				}else{
+					this.industry_id = '';
+					this.getData();
 				}
 			},
 			// 选择位置
@@ -174,6 +177,9 @@
 				if (this.value2[0] != "全市") {
 					let id = this.city_list.filter(item=>item.name==this.value2[0])[0].id;
 					this.city_id = id;
+					this.getData();
+				}else{
+					this.city_id = '';
 					this.getData();
 				}
 			},
@@ -191,10 +197,11 @@
 				this.getData();
 			},
 			// 跳转详情页
-			detail () {
-				this.$router.push("/policy/detail?id=2");
+			detail (id) {
+				this.$router.push("/policy/detail?id=" + id);
 			},
 			getData () {
+					console.log(123)
 				var data = {
 					department_id: this.department,
 					project_id: this.project,
@@ -214,11 +221,11 @@
 				var status = data.status == 0 ? 1 : 2;
 				var index = data.index;
 				var id = data.id;
-				this.$util.post('mobile/collect',{
+				this.$util.get('mobile/collect',{
 					status,
 					id
 				}).then(res=>{
-					if (data.status==1) {
+					if (status==1) {
 						this.$vux.toast.text("收藏成功");
 						this.policy_list[index].is_collect = 1;
 					}else {
