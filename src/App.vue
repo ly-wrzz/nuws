@@ -9,9 +9,9 @@ export default {
     name: 'App',
     mounted(){
 	    var token = localStorage.getItem("newsToken") || "";
-      // if (!token) {
+      if (!token) {
         this.$util.getTokene();
-      // }
+      }
     }
 }
 </script>
