@@ -36,6 +36,7 @@ function getTokene (callback) {
 			callback && callback();
 		})
 	}else{
+		var pageUrl = "http://mobile.likunwei.com/#" + router.history.current.path;
 		var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6ad5b33a57eec020&redirect_uri='+ encodeURIComponent(pageUrl) + 
 		'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 		window.location.href = url;
@@ -77,7 +78,8 @@ function ajaxRequest (url,params={},type){
 			if (response.data.code == 0) {
 				resolve(response.data);
 			}else if (response.data.code == -1) {
-				var pageUrl = window.location.href;
+				localStorage.removeItem('newsToken');
+				var pageUrl = "http://mobile.likunwei.com/#" + router.history.current.path;
 				var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6ad5b33a57eec020&redirect_uri='+ encodeURIComponent(pageUrl) + 
 				'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 				window.location.href = url;
