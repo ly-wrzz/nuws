@@ -17,13 +17,18 @@
 				<ul>
 					<li v-for="(item) in list" :key="item.id">
                         <div class="list_item">
+                            <div class="label">公司名字：</div>
+                            <div class="val">{{item.company_name}}</div>
+                        </div>
+                        <div class="list_item">
                             <div class="label">服务项目：</div>
-                            <div class="val" v-if="item.service_items==1">财税呆账</div>
+                            <div class="val">{{item.service_items}}</div>
+                            <!-- <div class="val" v-if="item.service_items==1">财税呆账</div>
                             <div class="val" v-if="item.service_items==2">项目申报</div>
                             <div class="val" v-if="item.service_items==3">人社补贴</div>
                             <div class="val" v-if="item.service_items==4">资质办理</div>
-                            <div class="val" v-if="item.service_items==5">工商服务</div>   
-                            <div class="val" v-if="item.service_items==6">其他服务</div>  
+                            <div class="val" v-if="item.service_items==5">工商服务</div>
+                            <div class="val" v-if="item.service_items==6">其他服务</div> -->
                         </div>
                         <div class="list_item">
                             <div class="label">合同金额：</div>

@@ -26,14 +26,13 @@ String.prototype.str2json = function(name){
 	return res
 };
 
-function getTokene (callback) {
+function getTokene () {
 	var pageUrl = window.location.href;
 	var { code } = pageUrl.str2json();
 	if (code) {
 		get('login/get-token', {code}).then(res=>{
 			localStorage.setItem("newsToken",res.data.token);
 			localStorage.setItem("newsIsBind",res.data.is_bind);
-			callback && callback();
 		})
 	}else{
 		var pageUrl = "http://mobile.likunwei.com/#" + router.history.current.path;
