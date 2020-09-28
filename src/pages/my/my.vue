@@ -65,6 +65,7 @@ export default {
 			this.$router.go(-1);//返回上一层
 		},
 		getData(){
+            this.$util.get('mobile/collect-list').then(res=>{})
         },
         jump(url){
             let newsIsBind = localStorage.getItem("newsIsBind") || 0;

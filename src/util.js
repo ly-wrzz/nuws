@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from "axios"
 import apiConfig from '../config/api.config'
-import router from './router'
 
 axios.defaults.baseURL = apiConfig.baseUrl;// 配置接口地址
 
@@ -35,7 +34,7 @@ function getTokene () {
 			localStorage.setItem("newsIsBind",res.data.is_bind);
 		})
 	}else{
-		var pageUrl = "http://mobile.likunwei.com/#" + router.history.current.path;
+		var pageUrl = "http://mobile.likunwei.com/#" + window.location.hash.replace("#","");
 		var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6ad5b33a57eec020&redirect_uri='+ encodeURIComponent(pageUrl) + 
 		'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 		window.location.href = url;
@@ -78,7 +77,7 @@ function ajaxRequest (url,params={},type){
 				resolve(response.data);
 			}else if (response.data.code == -1) {
 				localStorage.removeItem('newsToken');
-				var pageUrl = "http://mobile.likunwei.com/#" + router.history.current.path;
+				var pageUrl = "http://mobile.likunwei.com/#" + window.location.hash.replace("#","");
 				var url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6ad5b33a57eec020&redirect_uri='+ encodeURIComponent(pageUrl) + 
 				'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
 				window.location.href = url;
@@ -89,6 +88,8 @@ function ajaxRequest (url,params={},type){
         })
         .catch(err =>{
 			!noLoading && Vue.$vux.loading.hide();
+			var error = err.msg || "网络错误";
+			Vue.$vux.toast.text(error);
             reject(err)
         })
     })
